@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:todolist/todo_editor/todo_editor_widget.dart';
 
 class MainTodoListWidget extends StatefulWidget {
   const MainTodoListWidget({Key? key, required this.title}) : super(key: key);
@@ -12,9 +12,10 @@ class MainTodoListWidget extends StatefulWidget {
 
 class _MainTodoListWidgetState extends State<MainTodoListWidget> {
   void _onPlusButtonPressed() {
-    if (kDebugMode) {
-      print('Plus button pressed on main screen');
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TodoEditorWidget()),
+    );
   }
 
   @override
