@@ -26,7 +26,34 @@ class TodoEditorWidget extends StatelessWidget {
           ),
         ],
       ),
-      body: const SizedBox.shrink(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 26.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Что надо сделать...",
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      )),
+                  keyboardType: TextInputType.multiline,
+                  minLines: 8,
+                  maxLines: 8,
+                )),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 26.0),
+                child: Text("Важность", style: TextStyle(color: Colors.black, fontSize: 17.0)),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
