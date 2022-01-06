@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const title = 'Мои дела';
+    const title = 'My tasks';
 
     return MaterialApp(
       title: title,
