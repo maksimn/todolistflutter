@@ -17,6 +17,8 @@ const _lowPriority = 'low';
 const _highPriority = "!! high";
 const _priorities = [_normalPriority, _lowPriority, _highPriority];
 
+final _textEditingController = TextEditingController();
+
 class TodoEditor extends StatelessWidget {
   const TodoEditor({Key? key}) : super(key: key);
 
@@ -24,11 +26,19 @@ class TodoEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     var priorityDropdownMenuItems = _priorities.map((string) => DropdownMenuItem<String>(
       value: string, 
-      child: Text(string, style: TextStyle(color: string == _highPriority ? Colors.red : Colors.black)))
-    ).toList();
+      child: Text(
+        string, 
+        style: TextStyle(color: string == _highPriority ? Colors.red : Colors.black)
+      )
+    )).toList();
 
     return BlocBuilder<TodoEditorLogic, TodoEditorState>(
       builder: (context, state) {
+        _textEditingController.text = state.todoItem.text;
+        _textEditingController.selection = TextSelection.fromPosition(TextPosition(
+          offset: _textEditingController.text.length
+        ));
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: const Color(0xfff2f2f2),
@@ -40,8 +50,14 @@ class TodoEditor extends StatelessWidget {
             ),
             actions: <Widget>[
               TextButton(
-                onPressed: () {},
-                child: const Text(_saveButtonTitle, style: TextStyle(color: Colors.grey, fontSize: 17.0)),
+                onPressed: state.canTodoItemBeSaved ? () => _onSaveButtonPressed(context) : null,
+                child: Text(
+                  _saveButtonTitle, 
+                  style: TextStyle(
+                    color: state.canTodoItemBeSaved ? Colors.blue : Colors.grey, 
+                    fontSize: 17.0
+                  )
+                ),
               ),
             ],
           ),
@@ -51,6 +67,7 @@ class TodoEditor extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 26.0),
                     child: TextField(
+                      controller: _textEditingController,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -132,14 +149,21 @@ class TodoEditor extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 14, top: 24),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: state.canTodoItemBeRemoved ? () => _onDeleteButtonPressed(context) : null,
                       child: RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                         children: [
-                          WidgetSpan(child: Icon(Icons.delete, size: 18, color: Colors.grey)),
+                          WidgetSpan(child: Icon(
+                            Icons.delete, 
+                            size: 18, 
+                            color: state.canTodoItemBeRemoved ? Colors.red : Colors.grey)
+                          ),
                           TextSpan(
                             text: _deleteButtonTitle, 
-                            style: TextStyle(color: Colors.grey, fontSize: 17.0)
+                            style: TextStyle(
+                              color: state.canTodoItemBeRemoved ? Colors.red : Colors.grey, 
+                              fontSize: 17.0
+                            )
                           ),
                         ],
                         ),
@@ -155,8 +179,16 @@ class TodoEditor extends StatelessWidget {
     );
   }
 
+  void _onSaveButtonPressed(BuildContext context) {
+    context.read<TodoEditorLogic>().add(TodoItemSavedInTodoEditor());
+  }
+
   void _onCloseButtonPressed(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  void _onDeleteButtonPressed(BuildContext context) {
+    context.read<TodoEditorLogic>().add(TodoItemDeletedInTodoEditor());
   }
 
   void _onTextChanged(String text, BuildContext context) {

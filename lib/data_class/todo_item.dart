@@ -36,8 +36,8 @@ class TodoItem {
     priority: priority ?? TodoItemPriority.normal,
     deadline: deadline,
     isCompleted: isCompleted ?? false,
-    createdAt: createdAt ?? 0,
-    updatedAt: updatedAt ?? 0,
+    createdAt: createdAt ?? DateTime.now().millisecondsSinceEpoch,
+    updatedAt: updatedAt ?? (createdAt ?? DateTime.now().millisecondsSinceEpoch),
     isDirty: isDirty ?? false
   );
 
@@ -74,6 +74,21 @@ class TodoItem {
       updatedAt: updatedAt,
       isDirty: isDirty
     );
+  }
+
+  bool isEqualTo(TodoItem? other) {
+    if (other == null) {
+      return false;
+    }
+
+    return id == other.id &&
+      text == other.text &&
+      priority == other.priority &&
+      deadline == other.deadline &&
+      isCompleted == other.isCompleted &&
+      createdAt == other.createdAt &&
+      updatedAt == other.updatedAt &&
+      isDirty == other.isDirty;
   }
 
   Map<String, dynamic> toJson() => {

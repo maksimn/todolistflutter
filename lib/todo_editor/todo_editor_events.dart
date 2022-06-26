@@ -24,3 +24,7 @@ class DeadlineChangedInTodoEditor implements TodoEditorEvent {
 
   const DeadlineChangedInTodoEditor(this.deadline);
 }
+
+class TodoItemSavedInTodoEditor implements TodoEditorEvent { }
+
+class TodoItemDeletedInTodoEditor implements TodoEditorEvent { }
