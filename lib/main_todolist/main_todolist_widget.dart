@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/todo_editor/todo_editor_factory.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todolist/todo_editor/todo_editor.dart';
+import 'package:todolist/todo_editor/todo_editor_logic.dart';
 
 class MainTodoListWidget extends StatefulWidget {
   const MainTodoListWidget({Key? key, required this.title}) : super(key: key);
@@ -12,12 +14,15 @@ class MainTodoListWidget extends StatefulWidget {
 
 class _MainTodoListWidgetState extends State<MainTodoListWidget> {
 
-  final TodoEditorFactory _todoEditorFactory = TodoEditorFactoryImp();
-
   void _onPlusButtonPressed() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => _todoEditorFactory.create()),
+      MaterialPageRoute(builder: (context) => 
+        BlocProvider(
+          create: (_) => TodoEditorLogic(),
+          child: const TodoEditor(),
+        )
+      ),
     );
   }
 
