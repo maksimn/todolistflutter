@@ -17,13 +17,15 @@ class MainTodoListWidget extends StatefulWidget {
 class _MainTodoListWidgetState extends State<MainTodoListWidget> {
 
   void _onPlusButtonPressed() {
+    var todoItem = TodoItem.convenient(
+      text: "Some txt.", 
+      priority: TodoItemPriority.low, 
+      deadline: DateTime.now()
+    );
     var initialState = TodoEditorState(
       mode: TodoEditorMode.editing, 
-      todoItem: TodoItem.convenient(
-        text: "Some txt.", 
-        priority: TodoItemPriority.low, 
-        deadline: DateTime.now()
-      )
+      todoItem: todoItem,
+      savedTodoItem: todoItem
     );
 
     Navigator.push(
