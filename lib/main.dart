@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main_todolist/main_todolist_widget.dart';
+import 'package:todolist/main_page/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainTodoListWidget(title: title),
+      home: const MainPage(),
     );
   }
 }

@@ -16,14 +16,14 @@ class TodoEditorState {
   bool get canTodoItemBeSaved {
     var isStateAfterSaving = mode == TodoEditorMode.editing && todoItem.isEqualTo(savedTodoItem);
 
-    return !_isInitialStateForCreating && !_isInitialStateForEditing && !isStateAfterSaving;
+    return !_isInitialState && !isStateAfterSaving;
   }
 
   bool get canTodoItemBeRemoved {
-    return !_isInitialStateForCreating;
+    return !_isInitialState;
   }
 
-  bool get _isInitialStateForCreating {
+  bool get _isInitialState {
     var empty = TodoItem.convenient();
 
     return mode == TodoEditorMode.creating && 
@@ -31,9 +31,5 @@ class TodoEditorState {
       todoItem.text == empty.text &&
       todoItem.priority == empty.priority &&
       todoItem.deadline == empty.deadline;
-  }
-
-  bool get _isInitialStateForEditing {
-    return mode == TodoEditorMode.editing && savedTodoItem == null;
   }
 }
