@@ -5,7 +5,12 @@ import 'package:todolist/todo_editor/todo_editor_state.dart';
 
 class TodoEditorLogic extends Bloc<TodoEditorEvent, TodoEditorState> {
 
-  TodoEditorLogic(TodoEditorState initialState) : super(initialState) {
+  TodoEditorLogic(TodoItem? todoItem) : 
+    super(TodoEditorState(
+      mode: todoItem == null ? TodoEditorMode.creating : TodoEditorMode.editing,
+      todoItem: todoItem ?? TodoItem.convenient(),
+      savedTodoItem: todoItem
+    )) {
     on<TextChangedInTodoEditor>(_onTextChangedInTodoEditor);
     on<PriorityChangedInTodoEditor>(_onPriorityChangedInTodoEditor);
     on<DeadlineChangedInTodoEditor>(_onDeadlineChangedInTodoEditor);
