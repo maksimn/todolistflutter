@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todolist/data_class/todo_item.dart';
+import 'package:todolist/stream/saved_todo_stream.dart';
 import 'package:todolist/todo_editor/todo_editor.dart';
 import 'package:todolist/todo_editor/todo_editor_logic.dart';
 import 'package:todolist/todo_list/todo_list.dart';
@@ -17,7 +17,7 @@ class MainPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (_) => TodoListLogic(),
-        child: const TodoList(),
+        child: TodoList(savedTodoSubscriber: SavedTodoStream()),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _onPlusButtonPressed(context),
@@ -28,17 +28,11 @@ class MainPage extends StatelessWidget {
   }
 
   void _onPlusButtonPressed(BuildContext context) {
-    var todoItem = TodoItem.convenient(
-      text: "Some txt.", 
-      priority: TodoItemPriority.low, 
-      deadline: DateTime.now()
-    );
-    
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => 
         BlocProvider(
-          create: (_) => TodoEditorLogic(todoItem),
+          create: (_) => TodoEditorLogic(savedTodoPublisher: SavedTodoStream()),
           child: const TodoEditor(),
         )
       ),

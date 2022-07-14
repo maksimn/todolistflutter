@@ -10,3 +10,10 @@ class InitialTodoListDataFetched implements TodoListEvent {
 
   const InitialTodoListDataFetched(this.items);
 }
+
+class SavedTodoItem implements TodoListEvent {
+
+  final TodoItem item;
+
+  const SavedTodoItem(this.item);
+}
