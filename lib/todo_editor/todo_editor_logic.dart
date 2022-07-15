@@ -1,12 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todolist/data_class/todo_item.dart';
+import 'package:todolist/stream/saved_todo_stream.dart';
 import 'package:todolist/todo_editor/todo_editor_events.dart';
 import 'package:todolist/todo_editor/todo_editor_state.dart';
 
 class TodoEditorLogic extends Bloc<TodoEditorEvent, TodoEditorState> {
 
-  TodoEditorLogic(TodoItem? todoItem) : 
-    super(TodoEditorState(
+  final SavedTodoPublisher? savedTodoPublisher;
+
+  TodoEditorLogic({
+    TodoItem? todoItem,
+    this.savedTodoPublisher
+  }) : super(TodoEditorState(
       mode: todoItem == null ? TodoEditorMode.creating : TodoEditorMode.editing,
       todoItem: todoItem ?? TodoItem.convenient(),
       savedTodoItem: todoItem
@@ -43,13 +48,14 @@ class TodoEditorLogic extends Bloc<TodoEditorEvent, TodoEditorState> {
   }
 
   void _onTodoItemSavedInTodoEditor(TodoItemSavedInTodoEditor event, Emitter<TodoEditorState> emit) {
-    var nextTodoItemState = state.todoItem.copyWith(updatedAt: DateTime.now().microsecondsSinceEpoch);
+    var nextTodoItem = state.todoItem.copyWith(updatedAt: DateTime.now().microsecondsSinceEpoch);
 
     emit(TodoEditorState(
       mode: TodoEditorMode.editing,
-      todoItem: nextTodoItemState,
-      savedTodoItem: nextTodoItemState
+      todoItem: nextTodoItem,
+      savedTodoItem: nextTodoItem
     ));
+    savedTodoPublisher?.send(nextTodoItem);
   }
 
   void _onTodoItemDeletedInTodoEditor(TodoItemDeletedInTodoEditor event, Emitter<TodoEditorState> emit) {
