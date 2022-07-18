@@ -17,20 +17,15 @@ class TodoList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // ignore: no_logic_in_create_state
-  _TodoListState createState() => _TodoListState(savedTodoSubscriber);
+  _TodoListState createState() => _TodoListState();
 }
 
 class _TodoListState extends State<TodoList> {
 
-  final SavedTodoSubscriber? savedTodoSubscriber;
-
-  _TodoListState(this.savedTodoSubscriber);
-
   @override
   void initState() {
     context.read<TodoListLogic>().add(InitialTodoListDataFetched(testData));
-    savedTodoSubscriber?.read().listen((todoItem) { 
+    widget.savedTodoSubscriber?.read().listen((todoItem) { 
       context.read<TodoListLogic>().add(SavedTodoItem(todoItem));
     });
     super.initState();
